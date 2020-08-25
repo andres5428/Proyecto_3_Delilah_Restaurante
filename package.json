@@ -1,0 +1,23 @@
+{
+  "name": "proyecto3_delilah_restaurante",
+  "version": "1.0.0",
+  "description": "Proyecto 3: Creación de una API para el restaurante Delilah",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andres5428/Proyecto_3_Delilah_Restaurante.git"
+  },
+  "author": "Andrés Camilo Jaramillo Álvarez",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/andres5428/Proyecto_3_Delilah_Restaurante/issues"
+  },
+  "homepage": "https://github.com/andres5428/Proyecto_3_Delilah_Restaurante#readme"
+}
