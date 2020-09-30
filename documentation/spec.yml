@@ -1077,7 +1077,7 @@ paths:
     delete:
       tags:
       - admin
-      description: Modificar un pedido existente 
+      description: Eliminar un pedido existente 
       security:
         - bearerAuth: []
       parameters: 
