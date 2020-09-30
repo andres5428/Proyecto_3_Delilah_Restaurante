@@ -21,7 +21,10 @@ npm start
 
 ## Configuración de base de datos
 Conexión con base de datos: SQL a través de XAMPP
-Parámetros de la base de datos: {
+
+Los siguientes parámetros deben de configurarse en el archivo "config.js" que está dentro de la carpeta "config": 
+
+Parametrización de la base de datos: {
     "username": "root",
     "password": "",
     "database": "delilah_restaurant",

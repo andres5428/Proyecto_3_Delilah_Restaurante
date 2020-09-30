@@ -1073,6 +1073,63 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/internal_error'
+  /delilah/admin/delete/order/{orderId}:
+    delete:
+      tags:
+      - admin
+      description: Modificar un pedido existente 
+      security:
+        - bearerAuth: []
+      parameters: 
+        - in: path
+          name: orderId
+          required: true
+          schema: 
+            type: integer
+            example: 2
+      responses: 
+        '200': 
+          description: Petición exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    status: 
+                      type: integer
+                      example: 200
+                    ok: 
+                      type: boolean
+                      example: true
+                    details:
+                      type: string
+                      example: La orden ha sido eliminada
+        '400':
+          description: Petición errónea
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/bad_request'
+        '404':
+          description: Contenido no encontrado
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/not_found'
+        '500': 
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/internal_error' 
+          
 components:
   securitySchemes:
     bearerAuth:

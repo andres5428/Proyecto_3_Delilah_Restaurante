@@ -545,4 +545,42 @@ router.get('/delilah/user/get/order', extract_JWT_User, jsonVerify_User, (req, r
     })
 })
 
+/**
+ * Delete order - Only Admin
+ */
+
+router.delete('/delilah/admin/delete/order/:orderId', extract_JWT_Admin, jsonVerify_Admin, (req, res) => {
+  order.findByPk(req.params.orderId).then(orderFound => {
+    if (orderFound === null) {
+      res.status(404).json({
+        status: 404,
+        ok: false,
+        title: 'Contenido no encontrado',
+        detail: `La orden con id ${req.params.orderId} no existe en la base de datos`
+      })
+    }
+    else {
+      orderFound.destroy().then(() => {
+        res.status(200).json({
+          status: 200,
+          ok: true,
+          result: `La orden con id ${req.params.orderId} ha sido eliminada de la base de datos`
+        })
+      }).catch((error) => {
+        res.status(500).json({
+          status: 500,
+      error: error,
+      ok: false
+        })
+      })
+    }
+  }).catch((error) => {
+    res.status(500).json({
+      status: 500,
+      error: error,
+      ok: false
+    })
+  })
+})
+
 module.exports = router;
