@@ -5,8 +5,9 @@ const sequelize = require('../db');
 class order extends Model { }
 
 order.init({
-    product: DataTypes.STRING,
-    price: DataTypes.STRING
+    state: DataTypes.STRING,
+    payment: DataTypes.STRING
+
 }, {
     sequelize,
     modelName: "order"

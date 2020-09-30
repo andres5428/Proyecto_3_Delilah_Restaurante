@@ -3,7 +3,7 @@ module.exports = {
     required: ['product', 'price'],
     properties: {
         product: { type: 'string' },
-        price: { type: 'string' },
+        price: { type: 'integer' },
   
     }
 };

@@ -6,7 +6,8 @@ class product extends Model { }
 
 product.init({
     product: DataTypes.STRING,
-    price: DataTypes.STRING
+    price: DataTypes.STRING,
+    url: DataTypes.STRING
 }, {
     sequelize,
     modelName: "product"

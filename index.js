@@ -15,7 +15,7 @@ const port = process.env.PORT;
 server.listen(port, () => {
   console.log(`El servidor está funcionando a través del puerto ${port}`);
 
-  sequelize.sync({ force: false }).then(() => { // force: false = no drop table
+  sequelize.sync({ force:false }).then(() => { // force: false = no drop table
     console.log("Conexión establecida con la base de datos")
   }).catch((error) => {
     console.log("Se ha producido un error", error);
@@ -28,6 +28,12 @@ server.listen(port, () => {
 require('./database/associations');
 
 /**
+ * Helmet init - Security
+ */
+const helmet = require("helmet");
+
+
+/**
  * ErrorHandler
  */
 const { errorHandler } = require('./middleswares/errorhandler');
@@ -38,14 +44,12 @@ const { errorHandler } = require('./middleswares/errorhandler');
 const routes = require('./routes/routes');
 
 /**
- * Middlewares
+ * Global middlewares
  */
-var cors = require('cors');
 
-server.use(cors()); //Enable CORS Origin *
 server.use(express.json());
 server.use(routes);
-
+server.use(helmet());
 server.use(errorHandler);
 
 // Sequelize Init

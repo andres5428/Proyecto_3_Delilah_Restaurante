@@ -4,11 +4,13 @@
   "description": "Proyecto 3: Creación de una API para el restaurante Delilah",
   "main": "index.js",
   "dependencies": {
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-json-validator-middleware": "^2.1.1",
+    "helmet": "^4.1.1",
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.2.1",
     "nodemon": "^2.0.4",
@@ -16,6 +18,7 @@
   },
   "devDependencies": {},
   "scripts": {
+    "start": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "node server.js"
   },

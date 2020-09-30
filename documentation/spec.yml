@@ -1,0 +1,1166 @@
+openapi: 3.0.0
+info:
+  title: Delilah Restó
+  description: 'API para manejo de usuarios, productos y pedidos de Delilah Restó'
+  contact:
+    name: Andrés Camilo Jaramillo Álvarez
+    url: https://github.com/andres5428
+    email: andres54jaramillo@gmail.com
+  license:
+    name: Apache 2.0 
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  version: 1.0.0
+
+servers:
+  # Added by API Auto Mocking Plugin
+  - url: https://virtserver.swaggerhub.com/andres5428/Delilah_Resto/1.0.0
+    description: SwaggerHub API Auto Mocking
+   
+paths:
+  /delilah/admin/post/login:
+    post:
+      tags:
+      - admin
+      description: Permite al administrador conectarse con su username y password para obtener el token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                username: 
+                  type: string
+                  example: correo@gmail.com
+                  description: Debe de ser en formato de correo electrónico
+                password:
+                  type: string
+                  example: contraseña*
+                
+      responses:
+        '200':
+          description: Petición exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                   properties:
+                    status:
+                      type: integer
+                      example: 200
+                    token:
+                      type: string
+                      example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpX
+        '400': 
+          description: Petición errónea
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                 $ref: '#/components/schemas/bad_request'
+        '401':
+          description: Sin autorización
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                 $ref: '#/components/schemas/unauthorized'
+        '403':
+          description: Prohibido
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                 $ref: '#/components/schemas/forbidden'   
+                 
+  /delilah/user/post/login:
+    post:
+      tags:
+      - user
+      description: Permite al usuario conectarse con su username y password para obtener el token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                username: 
+                  type: string
+                  example: correo@gmail.com
+                  description: Debe de ser en formato de correo electrónico
+                password:
+                  type: string
+                  format: password
+                  example: contraseña*
+      responses:
+        '200':
+          description: Petición exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                   $ref: '#/components/schemas/login'
+        '400': 
+          description: Petición errónea
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                 $ref: '#/components/schemas/bad_request'
+                 
+        '401':
+          description: Sin autorización
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                 $ref: '#/components/schemas/unauthorized'
+        '403':
+          description: Prohibido
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                 $ref: '#/components/schemas/forbidden'
+                 
+  /delilah/admin/get/users:
+    get:
+      tags: 
+      - admin
+      description: El administrador obtiene todos los usuarios registrados
+      security:
+        - bearerAuth: []
+      responses: 
+        '200':
+          description: Petición exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    status:
+                      type: integer
+                      example: 200
+                    ok:
+                      type: boolean
+                      example: true
+                    data:
+                      type: object
+                      example: {
+                        username: correo@gmail.com,
+                        name: Camilo,
+                        lastname: Jaramillo,
+                        address: Calle 10,
+                        number: 3213213232
+                      }
+        '400':
+          description: Petición errónea
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/bad_request'              
+        
+        '404':
+          description: Datos ingresados erróneos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/not_found'
+        '500': 
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/internal_error'
+  /delilah/admin/get/{userId}:
+    get:
+      tags: 
+      - admin
+      description: Obtener un usuario a partir de su id
+      security:
+        - bearerAuth: []
+      parameters: 
+        - in: path
+          name: userId
+          required: true
+          schema: 
+            type: integer
+            example: 2
+      responses: 
+        '200': 
+          description: Petición exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    status: 
+                      type: integer
+                      example: 200
+                    ok: 
+                      type: boolean
+                      example: true
+                    data:
+                      type: object
+                      example: {
+                        username: correo@gmail.com,
+                        name: Camilo,
+                        lastname: Jaramillo,
+                        address: Calle 10,
+                        number: 3213213232
+                      }
+        '400':
+          description: Petición errónea
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/bad_request'
+        '404':
+          description: Contenido no encontrado
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/not_found'
+        '500': 
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/internal_error'
+  /delilah/user/get/products:     
+    get:
+      tags:
+      - user
+      description: El usuario obtiene los productos disponibles en el restaurante
+      security:
+        - bearerAuth: []
+      responses: 
+        '200':
+          description: Petición exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    status:
+                      type: integer
+                      example: 200
+                    ok:
+                      type: boolean
+                      example: true
+                    data:
+                      type: array
+                      example: ['Pastas', 'Carne', 'Jugo']
+                      
+        '400':
+          description: Petición errónea
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/bad_request'
+        
+        '404':
+          description: Datos ingresados erróneos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/not_found'
+        '500': 
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/internal_error'
+                  
+  /delilah/admin/get/product/{productId}:
+    get:
+      tags: 
+      - admin
+      description: Obtener un producto a partir de su id
+      security:
+        - bearerAuth: []
+      parameters: 
+        - in: path
+          name: productId
+          required: true
+          schema: 
+            type: integer
+            example: 2
+      responses: 
+        '200': 
+          description: Petición exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    status: 
+                      type: integer
+                      example: 200
+                    ok: 
+                      type: boolean
+                      example: true
+                    data:
+                      type: object
+                      example: {
+                        id: 1,
+                        product: Sanduche,
+                        price: 300,
+                      }
+        '400':
+          description: Petición errónea
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/bad_request'
+        '404':
+          description: Contenido no encontrado
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/not_found'
+        '500': 
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/internal_error'
+  /delilah/user/get/info: 
+    get:
+      tags:
+      - user
+      description: El usuario obtiene su información personal
+      security:
+        - bearerAuth: []
+      responses: 
+        '200':
+          description: Petición exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    status:
+                      type: integer
+                      example: 200
+                    ok:
+                      type: boolean
+                      example: true
+                    data:
+                      type: object
+                      example: {
+                        username: correo@gmail.com,
+                        name: Camilo,
+                        lastname: Jaramillo,
+                        address: Calle 10,
+                        number: 3213213232
+                      }
+        '400':
+          description: Petición errónea
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/bad_request'
+        
+        '500': 
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/internal_error'
+                      
+  /delilah/admin/get/products:     
+    get:
+      tags:
+      - admin
+      description: El administrador obtiene los productos disponibles en el restaurante
+      security:
+        - bearerAuth: []
+      responses: 
+        '200':
+          description: Petición exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    status:
+                      type: integer
+                      example: 200
+                    ok:
+                      type: boolean
+                      example: true
+                    data:
+                      type: array
+                      example: ['Pastas', 'Carne', 'Jugo']
+        '400':
+          description: Petición errónea
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/bad_request'
+        
+        '404':
+          description: Datos ingresados erróneos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/not_found'
+        '500': 
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/internal_error'
+  /delilah/user/post/register:
+    post:
+      tags: 
+      - user
+      description: Crear un usuario en la base de datos
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                username: 
+                  type: string
+                  example: correo@gmail.com
+                password: 
+                  type: string
+                  example: contraseña*
+                name: 
+                  type: string
+                  example: Camilo
+                lastname: 
+                  type: string
+                  example: Jaramillo
+                number: 
+                  type: string
+                  example: 321323130
+                address: 
+                  type: string
+                  example: Calle 10
+      responses:
+        '200':
+          description: Petición exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    status: 
+                      type: integer
+                      example: 200
+                    ok: 
+                      type: boolean
+                      example: true
+                    result:
+                      type: string
+                      example: El usuario ha sido creado
+        '400':
+          description: Petición errónea
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/bad_request'
+        '403':
+          description: No ingresaste los valores solicitados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/forbidden'
+        '500': 
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/internal_error'
+                  
+  /delilah/admin/post/register:
+    post:
+      tags:
+        - admin
+      description: Crear un administrador en la base de datos
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                username: 
+                  type: string
+                  example: correo@gmail.com
+                password: 
+                  type: string
+                  example: contraseña*
+      responses:
+        '200':
+          description: Petición exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    status: 
+                      type: integer
+                      example: 200
+                    ok: 
+                      type: boolean
+                      example: true
+                    result:
+                      type: string
+                      example: El administrador ha sido creado
+        '400':
+          description: Petición errónea
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/bad_request'
+        '403':
+          description: No ingresaste los valores solicitados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/forbidden'
+        '500': 
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/internal_error'
+  /delilah/admin/post/product:
+    post:
+      tags:
+      - admin
+      description: Crear un producto en la base de datos
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                product: 
+                  type: string
+                  example: Sanduche
+                price: 
+                  type: integer
+                  example: 300
+                url:
+                  type: string
+                  example: resources/images/focaccia
+      responses:
+        '200':
+          description: Petición exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    status: 
+                      type: integer
+                      example: 200
+                    ok: 
+                      type: boolean
+                      example: true
+                    result:
+                      type: string
+                      example: El producto ha sido creado 
+        '400':
+          description: Petición errónea
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/bad_request'
+        '403':
+          description: Error en validación
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/forbidden'
+        '500': 
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/internal_error'
+  /delilah/admin/put/product/{productId}:
+    put:
+      tags: 
+      - admin
+      description: Modificar un producto existente
+      security:
+        - bearerAuth: []
+      parameters: 
+        - in: path
+          name: productId
+          required: true
+          schema: 
+            type: integer
+            example: 2
+      responses: 
+        '200': 
+          description: Petición exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    status: 
+                      type: integer
+                      example: 200
+                    ok: 
+                      type: boolean
+                      example: true
+                    data:
+                      type: object
+                      example: {"id": "1", "product": "ProductoModificado"}
+        '400':
+          description: Petición errónea
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/bad_request'
+        '404':
+          description: Contenido no encontrado
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/not_found'
+        '500': 
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/internal_error'
+  /delilah/admin/delete/{productId}:
+    delete:
+      tags: 
+      - admin
+      description: Eliminar un producto existente de la base de datos
+      security:
+        - bearerAuth: []
+      parameters: 
+        - in: path
+          name: productId
+          required: true
+          schema: 
+            type: integer
+            example: 3
+      responses: 
+        '200': 
+          description: Petición exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    status: 
+                      type: integer
+                      example: 200
+                    ok: 
+                      type: boolean
+                      example: true
+                    details:
+                      type: string
+                      example: El producto ha sido eliminado
+        '400':
+          description: Petición errónea
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/bad_request'
+        '404':
+          description: Contenido no encontrado
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/not_found'
+        '500': 
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/internal_error'
+                  
+  /delilah/admin/get/user-orders:
+    get:
+      tags:
+      - admin
+      description: El administrador obtiene los usuarios registrados con sus respectivos pedidos
+      security:
+        - bearerAuth: []
+      responses:
+        '200': 
+          description: Petición exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    status: 
+                      type: integer
+                      example: 200
+                    ok: 
+                      type: boolean
+                      example: true
+                    data:
+                      type: array
+                      example: [{"id": "1",
+                        "username": "correo@gmail.com",
+                        "name": "Camilo",
+                        "lastname": "Jaramillo",
+                        "number": "3123123",
+                        "address": "Calle 10",
+                        "orders": [{
+                          "state": "nueva orden",
+                          "payment": "crédito",
+                          "userId": "1"
+                        }]
+                      }]
+        '400':
+          description: Petición errónea
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/bad_request'
+        '404':
+          description: Contenido no encontrado
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/not_found'
+        '500': 
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/internal_error'
+  /delilah/admin/get/orders: 
+   get:
+    tags:
+    - admin
+    description: Obtener todos los pedidos vigentes
+    security:
+        - bearerAuth: []
+    responses:
+        '200': 
+          description: Petición exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    status: 
+                      type: integer
+                      example: 200
+                    ok: 
+                      type: boolean
+                      example: true
+                    data:
+                      type: array
+                      example: [{"id": "1",
+                        "state": "Nuevo pedido",
+                        "payment": "Efectivo",
+                        "userId": "1",
+                        "user": [{
+                          "username": "correo@gmail.com",
+                          "name": "Camilo",
+                          "lastname": "Jaramillo",
+                          "number": "312312312",
+                          "address": "Calle 10"
+                        }]
+                      }]
+        '400':
+          description: Petición errónea
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/bad_request'
+        '404':
+          description: Contenido no encontrado
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/not_found'
+        '500': 
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/internal_error'
+  /delilah/admin/put/order/{orderId}:
+    put:
+      tags:
+      - admin
+      description: Modificar un pedido existente 
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                state: 
+                  type: string
+                  example: Nuevo pedido
+                payment:
+                  type: string
+                  example: Crédito
+      security:
+        - bearerAuth: []
+      parameters: 
+        - in: path
+          name: orderId
+          required: true
+          schema: 
+            type: integer
+            example: 2
+      responses: 
+        '200': 
+          description: Petición exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    details:
+                      type: string
+                      example: Pedido modificado
+                    status: 
+                      type: integer
+                      example: 200
+                    ok: 
+                      type: boolean
+                      example: true
+                    data:
+                      type: object
+                      example: {"id": "1", "state": "En proceso", 
+                        "userId": "1"
+                      }
+                    
+        '400':
+          description: Petición errónea
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/bad_request'
+        '404':
+          description: Contenido no encontrado
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/not_found'
+        '500': 
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/internal_error'
+  /delilah/user/post/order:
+    post:
+      tags:
+      - user
+      description: Creación de pedido por el usuario
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                product: 
+                  type: array
+                  example: ['Sanduche', 'Jugo']
+                state: 
+                  type: string
+                  example: Nueva orden
+                payment:
+                  type: string
+                  example: Efectivo
+                userId:
+                  type: integer
+                  example: 2
+      responses:
+        '200':
+          description: Petición exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    status: 
+                      type: integer
+                      example: 200
+                    ok: 
+                      type: boolean
+                      example: true
+                    details:
+                      type: string
+                      example: La orden ha sido creada
+        '400':
+          description: Petición errónea
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/bad_request'
+        '500': 
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/internal_error'
+  /delilah/user/get/order:
+    get:
+      tags:
+      - user
+      description: El usuario obtiene sus ordenes
+      security:
+        - bearerAuth: []
+      responses:
+        '200': 
+          description: Petición exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    status: 
+                      type: integer
+                      example: 200
+                    ok: 
+                      type: boolean
+                      example: true
+                    data:
+                      type: array
+                      example: [{"id": "1",
+                        "username": "correo@gmail.com",
+                        "orders": [{
+                          "id": "correo@gmail.com",
+                          "state": "Nuevo pedido",
+                          "payment": "Efectivo",
+                          "userId": "1"
+                        }]
+                      }]
+        '400':
+          description: Petición errónea
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/bad_request'
+        '500': 
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/internal_error'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    bad_request:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 400
+        ok:
+          type: boolean
+          example: false
+        title:
+          type: string
+          example: Error en petición
+        detail:
+          type: string
+          example: No has ingresado los datos solicitados.
+    unauthorized:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 401
+        ok:
+          type: boolean
+          example: false
+        title:
+          type: string
+          example: Sin autorización
+        detail:
+          type: string
+          example: La contraseña es incorrecta
+    forbidden:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 403
+        ok:
+          type: boolean
+          example: false
+        title:
+          type: string
+          example: Prohibido
+        detail:
+          type: string
+          example: El valor ingresado ya está registrado
+    not_found:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 404
+        ok:
+          type: boolean
+          example: false
+        title:
+          type: string
+          example: Contenido no encontrado
+        detail:
+          type: string
+          example: Los datos ingresados no se encuentran en la base de datos
+    internal_error:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 500
+        ok:
+          type: boolean
+          example: false
+        title:
+          type: string
+          example: Error interno del servidor
+        detail:
+          type: string
+          example: No se pudo establecer conexión con la base de datos
+    login:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 200
+        token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6Ik
